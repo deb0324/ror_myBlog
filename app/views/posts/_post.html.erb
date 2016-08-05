@@ -1,0 +1,51 @@
+<div class="row">
+  <div class="well col-md-6">
+    <p><h4><u><%= post.title %></u></h4></p>
+    <p><%= auto_link(simple_format(post.content)) %></p>
+    <p><%= post.comments.size %> comments </p>
+
+    <small><p><%= post.created_at.strftime("%b %d, %Y") %>  
+      <% if post.user != nil %>
+        by <%= link_to post.user[:nickname], user_path(post.user) %>
+      <% end %>
+    </p></small>
+    
+    <p>
+      <% post.categories.each do |category| %>
+        <span class="btn btn-danger"><%= link_to category.title, category_path(category), {:style=>'color: white;'} %></span>
+      <% end %>
+    </p>
+    <span>
+      <% if show %>
+        <% if current_user %>
+          <% if current_user.author?(post.id) || current_user.admin? %>
+            <%= link_to "Edit Post", edit_post_path(post.id) %> 
+            <%= link_to "Delete Post", post_path(post), :method => :delete %> 
+
+          <% end %>
+        <% end %>
+      <% else %>
+        <%= link_to "show post", post_path(post) %>
+      <% end %>
+
+
+
+       <p>
+          <%= link_to vote_post_path(post, vote: true), remote: true, class: "btn btn-warning", method: 'post' do %>Like
+          <% end %>
+          <span class="btn" id="<%= post.id %>_likeCount">
+            <%= post.up_votes %> Likes  
+          </span> 
+          <%= link_to vote_post_path(post, vote: false), remote: true, class: "btn btn-warning", method: 'post' do %>Dislike 
+          <% end %>
+          <span class="btn" id="<%= post.id %>_dislikeCount">
+            <%= post.down_votes %> Dislikes  
+          </span> 
+          <p><span id="<%= post.id %>_message"></span></p>
+            
+        </p>
+        
+      
+    </span>
+  </div>
+</div>

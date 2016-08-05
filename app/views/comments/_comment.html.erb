@@ -1,0 +1,22 @@
+<div class="col-md-7 well">
+  <p><%= auto_link(simple_format(comment.content)) %></p>
+  <p><small><%= comment.created_at.strftime("%b %d, %Y")%> by 
+  <% if comment.user != nil %>
+    <%= link_to comment.user[:nickname], user_path(comment.user) %></small></p>
+  <% end %>
+
+  <p>
+    <%= link_to vote_post_comment_path(post, comment, vote: true), remote: true, class: "btn btn-warning", method: 'post' do %>Like
+    <% end %>
+    <span class="btn"  id="<%= comment.id %>_likeCount">
+      <%= comment.up_votes %> Likes  
+    </span> 
+    <%= link_to vote_post_comment_path(post, comment, vote: false), remote: true, class: "btn btn-warning", method: 'post' do %>Dislike 
+    <% end %>
+    <span class="btn"  id="<%= comment.id %>_likeCount">
+      <%= comment.down_votes %> Dislikes  
+    </span> 
+    
+    <p><span id="<%= comment.id %>_message"></span></p>
+  </p>
+</div>
